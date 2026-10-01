@@ -31,7 +31,6 @@ jobs:
           version: 11.25.0
           runtime: node@24
           package-json-file: beyoplan/package.json
-          install: false
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
