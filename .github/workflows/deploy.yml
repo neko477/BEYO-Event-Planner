@@ -25,17 +25,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+      - name: Set up pnpm and Node
+        uses: pnpm/setup@v0
         with:
-          version: 10.12.5
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-          cache-dependency-path: beyoplan/pnpm-lock.yaml
+          version: 11.25.0
+          runtime: node@24
+          package-json-file: beyoplan/package.json
+          install: false
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
