@@ -230,7 +230,15 @@ export default function App() {
       window.alert('WithLIVEの参加者を選択してください。');
       return;
     }
-    setPlans((current) => current.map((plan) => plan.id === planId ? { ...plan, confirmed: true } : plan));
+    if (!plan) return;
+    setPlans((current) => [
+      ...current.map((candidate) => candidate.id === planId ? { ...candidate, confirmed: true } : candidate),
+      {
+        ...plan,
+        id: createId('plan'),
+        confirmed: false,
+      },
+    ]);
   };
 
   const editPlan = (planId: string) => {
