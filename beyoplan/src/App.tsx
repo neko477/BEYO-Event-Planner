@@ -243,7 +243,9 @@ export default function App() {
 
   const changePlanEvent = (planId: string, eventId: string) => {
     const event = eventById.get(eventId);
-    const slot = SCHEDULE_SLOTS.find((candidate) => candidate.eventId === event?.id);
+    const currentPlan = plans.find((plan) => plan.id === planId);
+    const eventSlots = SCHEDULE_SLOTS.filter((candidate) => candidate.eventId === event?.id);
+    const slot = eventSlots.find((candidate) => candidate.date === currentPlan?.scheduledDate) ?? eventSlots[0];
     if (!event || !slot) return;
     setPlans((current) =>
       current.map((plan) =>
@@ -472,6 +474,7 @@ export default function App() {
                 );
                 const eventSlots = SCHEDULE_SLOTS.filter((candidate) => candidate.eventId === event.id);
                 const eventDates = [...new Set(eventSlots.map((candidate) => candidate.date))];
+                const partsForDate = eventSlots.filter((candidate) => candidate.date === schedule.date);
                 return (
                   <article className={`plan-card ${serviceMeta[event.service].className}`} key={plan.id}>
                     <div className="plan-main">
@@ -491,6 +494,13 @@ export default function App() {
                             {events.map((candidate) => <option key={candidate.id} value={candidate.id}>{serviceMeta[candidate.service].label}｜{candidate.label}</option>)}
                           </select>
                         </label>
+                        {event.service === 'fortune' && partsForDate.length > 0 && (
+                          <label className="field"><span>公式の部</span>
+                            <select value={plan.scheduleId} onChange={(e) => changePlanPart(plan.id, e.target.value)}>
+                              {partsForDate.map((candidate) => <option key={candidate.id} value={candidate.id}>{candidate.label}｜{candidate.time}</option>)}
+                            </select>
+                          </label>
+                        )}
                         <label className="field"><span>開始時間（個別に編集可）</span>
                           <input value={schedule.time} onChange={(e) => updatePlan(plan.id, { scheduledTime: e.target.value })} placeholder="例：13:10" />
                         </label>
