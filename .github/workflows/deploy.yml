@@ -25,12 +25,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up pnpm and Node
-        uses: pnpm/setup@v0
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
-          version: 11.25.0
-          runtime: node@24
-          package-json-file: beyoplan/package.json
+          node-version: 24
+
+      - name: Enable pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.25.0 --activate
+          pnpm --version
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
